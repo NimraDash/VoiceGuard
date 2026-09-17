@@ -1,0 +1,49 @@
+====================================================================
+DATASET AUDIT
+====================================================================
+total files: 854   real: 423   fake: 431
+
+--- 1. SAMPLE RATE (the #1 leak) ---
+sr     8000   16000  22050  24000  32000  44100  48000
+class                                                 
+fake       2      7      2    170     75     44    131
+real       0     10     12      7      0     33    361
+
+--- 2. FILE FORMAT / SUBTYPE (leak #2) ---
+ext    .wav
+class      
+fake    431
+real    423
+subtype  PCM_16
+class          
+fake        431
+real        423
+
+--- 3. DURATION ---
+       count       mean         std       min        25%      50%        75%          max
+class                                                                                    
+fake   431.0  15.908125    9.762478  3.840000   9.980187  12.9000  18.240000    64.490958
+real   423.0  51.626717  126.372044  2.397833  12.114250  18.2335  47.375321  2170.322721
+
+--- 4. LOUDNESS / SILENCE (on sampled subset) ---
+            rms      peak  silent_frac
+class                                 
+fake   0.097641  0.634734     0.096986
+real   0.096533  0.664777     0.070940
+
+--- 5. FILENAME STRUCTURE (for grouped splitting) ---
+  real top prefixes: [('real', 423)]
+  fake top prefixes: [('fake', 431)]
+
+--- 6. SHORTCUT TEST: can metadata alone predict the label? ---
+  AUC from (sample_rate, duration, filesize) : 0.861
+  AUC from (rms, peak, silence_fraction)     : 0.562
+
+  INTERPRETATION
+    AUC ~0.50  -> clean, no metadata shortcut
+    AUC  0.65+ -> a real shortcut exists, you MUST normalise it away
+    AUC  0.90+ -> severe. Your dataset is separable without listening.
+
+--- 7. VERDICT / REQUIRED ACTIONS ---
+  * METADATA LEAK: resample everything to 16 kHz and random-crop to a fixed duration before training.
+  * Sample rates differ between classes. Force a common SR.

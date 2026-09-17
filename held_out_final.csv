@@ -1,0 +1,9 @@
+path,label,class
+New_Real\Harry_13.wav,0,real
+New_Real\nimra_01.wav,0,real
+New_Real\Harry_15.wav,0,real
+New_Real\Harry_14.wav,0,real
+New_Fake\xtts_Harry_4.wav,1,fake
+New_Fake\xtts_Harry_12.wav,1,fake
+New_Fake\xtts_nimra_06.wav,1,fake
+New_Fake\xtts_Harry_11.wav,1,fake

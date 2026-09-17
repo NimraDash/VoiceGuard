@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VoiceGuard</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wordmark">VoiceGuard</div>
+  <div class="meta" id="meta">Loading model</div>
+</header>
+
+<main class="page">
+
+  <section class="intro">
+    <h1>Is this caller's voice real?</h1>
+    <p>Upload a recording or capture one now. Every four seconds of audio is
+       scored for signs of synthetic speech, and the call is given a
+       recommended action.</p>
+  </section>
+
+  <section class="capture" id="capture">
+    <div class="capture-row">
+      <label class="btn btn-primary" for="file">
+        Choose a recording
+        <input type="file" id="file" accept="audio/*" hidden>
+      </label>
+      <button class="btn btn-quiet" id="recordBtn">Record</button>
+      <span class="filename" id="filename"></span>
+    </div>
+    <div class="recording" id="recording" hidden>
+      <div class="rec-head">
+        <span class="pulse"></span>
+        <span id="recTime">0:00</span>
+        <span class="rec-sep">·</span>
+        <span class="rec-label">Microphone</span>
+        <span class="level"><span class="level-fill" id="levelFill"></span></span>
+      </div>
+      <div class="live" id="live" hidden>
+        <div class="live-row">
+          <span class="live-label">Live risk</span>
+          <span class="live-score" id="liveScore">—</span>
+        </div>
+        <div class="live-track">
+          <div class="live-marker" id="liveMarker"></div>
+        </div>
+        <div class="live-note" id="liveNote">Listening…</div>
+      </div>
+    </div>
+
+    <div class="playback" id="playback" hidden>
+      <span class="playback-label">Your last recording</span>
+      <audio id="player" controls preload="metadata"></audio>
+    </div>
+  </section>
+
+  <section class="context">
+    <h2>Call context</h2>
+    <p class="sub">The voice score says how the audio sounds. This says what
+       is at stake. The two together decide how strongly the system
+       recommends verifying the caller.</p>
+    <div class="context-row">
+      <div class="field">
+        <span class="field-label">Caller</span>
+        <div class="segmented" id="callerKnown" data-value="0">
+          <button type="button" data-v="0" class="on">Unknown number</button>
+          <button type="button" data-v="1">Known contact</button>
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Transaction at stake</span>
+        <div class="segmented" id="valueBucket" data-value="0">
+          <button type="button" data-v="0" class="on">None</button>
+          <button type="button" data-v="1">Moderate</button>
+          <button type="button" data-v="2">High value</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="state" id="stateIdle">
+    <p class="empty">No recording analysed yet.</p>
+  </section>
+
+  <section class="state" id="stateBusy" hidden>
+    <p class="empty">Scoring audio…</p>
+  </section>
+
+  <section class="state" id="stateError" hidden>
+    <p class="error" id="errorText"></p>
+  </section>
+
+  <section class="results" id="results" hidden>
+
+    <div class="verdict">
+      <div class="verdict-band" id="verdictBand">Synthetic</div>
+      <div class="verdict-score"><span id="verdictScore">0.00</span></div>
+      <p class="verdict-message" id="verdictMessage"></p>
+    </div>
+
+    <div class="scale" aria-hidden="true">
+      <div class="scale-track">
+        <div class="zone zone-genuine" id="zoneGenuine"></div>
+        <div class="zone zone-uncertain" id="zoneUncertain"></div>
+        <div class="zone zone-synthetic" id="zoneSynthetic"></div>
+        <div class="marker" id="marker"></div>
+      </div>
+      <div class="scale-labels">
+        <span>Genuine</span>
+        <span class="scale-thresholds" id="scaleThresholds"></span>
+        <span>Synthetic</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>Segment scores</h2>
+      <p class="sub" id="segmentSub"></p>
+      <div class="segments" id="segments"></div>
+    </div>
+
+    <div class="block">
+      <h2>Recommended action</h2>
+      <div class="action" id="action">
+        <div class="action-title" id="actionTitle"></div>
+        <p class="action-detail" id="actionDetail"></p>
+        <div class="action-source" id="actionSource"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="foot">
+    <p>Audio is scored in memory and is not stored. Detection is one layer of
+       verification, not a replacement for confirming identity on a known
+       number.</p>
+  </footer>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

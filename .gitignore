@@ -1,0 +1,12 @@
+Real_Audios/
+Fake_Audios/
+New_Real/
+New_Fake/
+dataset
+static/uploads/
+*.wav
+*.mp3
+*.flac
+__pycache__/
+venv/
+.env
